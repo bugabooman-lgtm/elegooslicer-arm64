@@ -110,6 +110,9 @@ To quit: close ElegooSlicer, then swipe Termux away or type `exit` in it.
   like a laptop touchpad; "Direct touch" taps where your finger is. A Bluetooth mouse is easiest.
 - If everything is tiny or huge, change **Display resolution mode** in Termux:X11 Preferences
   (for example "scaled" with a scale of 150–200%).
+- **Cloud printing is not available in this build.** Elegoo's cloud connection uses a closed-source
+  library that only exists for PCs, so it's turned off. Printing to the Centauri Carbon 2 over your
+  local Wi-Fi (LAN) uses separate code and should still work when the tablet is on the same network.
 - If sending prints straight to the Centauri Carbon 2 doesn't work from the tablet, use
   **Export G-code** and send the file with the Elegoo app instead.
 
