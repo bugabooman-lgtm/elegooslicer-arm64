@@ -1,0 +1,108 @@
+name: Build ElegooSlicer for ARM64 Linux
+
+# Run manually from the Actions tab: "Run workflow", optionally pick a version tag.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "ElegooSlicer release tag to build (e.g. v1.5.3.5)"
+        required: true
+        default: "v1.5.3.5"
+
+permissions:
+  contents: write   # needed to publish the AppImage as a GitHub Release
+
+jobs:
+  build:
+    name: Build ${{ inputs.version }} (aarch64)
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 360
+    env:
+      CMAKE_BUILD_PARALLEL_LEVEL: 4
+
+    steps:
+      - name: Check out ElegooSlicer ${{ inputs.version }}
+        uses: actions/checkout@v4
+        with:
+          repository: ELEGOO-3D/ElegooSlicer
+          ref: ${{ inputs.version }}
+          lfs: false
+
+      - name: Show machine info
+        run: |
+          uname -a
+          nproc
+          free -h
+          df -h .
+
+      - name: Install system dependencies
+        run: |
+          mkdir -p deps/build/destdir
+          sudo ./build_linux.sh -ur
+          sudo chown -R "$USER" ./
+
+      - name: Restore cached dependencies
+        id: deps-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: deps/build
+          key: elegoo-deps-aarch64-${{ hashFiles('deps/**') }}
+
+      - name: Download Elegoo web components (printer connection pages)
+        run: ./build_linux.sh -wr
+
+      - name: Build dependencies (slow, cached after first success)
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        run: ./build_linux.sh -drlL
+
+      # Save right away so a later failure doesn't throw away hours of work.
+      - name: Save dependency cache
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: deps/build
+          key: elegoo-deps-aarch64-${{ hashFiles('deps/**') }}
+
+      - name: Build ElegooSlicer and AppImage
+        run: ./build_linux.sh -isrlL
+
+      - name: Collect AppImage
+        id: collect
+        run: |
+          ls -la build/
+          appimage=$(ls build/*.AppImage | head -n1)
+          if [ -z "$appimage" ]; then echo "No AppImage produced"; exit 1; fi
+          out="ElegooSlicer-${{ inputs.version }}-aarch64.AppImage"
+          mkdir -p out
+          cp "$appimage" "out/$out"
+          chmod +x "out/$out"
+          (cd out && sha256sum "$out" > "$out.sha256")
+          echo "file=out/$out" >> "$GITHUB_OUTPUT"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ElegooSlicer-${{ inputs.version }}-aarch64
+          path: out/*
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.version }}-arm64
+          name: ElegooSlicer ${{ inputs.version }} for ARM64 Linux
+          body: |
+            Unofficial ARM64 (aarch64) Linux build of ElegooSlicer ${{ inputs.version }},
+            built from https://github.com/ELEGOO-3D/ElegooSlicer at tag ${{ inputs.version }}.
+            Intended for running on an Android tablet through Termux + a Debian/Ubuntu proot.
+            ElegooSlicer is licensed under AGPL-3.0.
+          files: out/*
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: |
+            deps/build/**/*.log
+            build/**/*.log
+          if-no-files-found: ignore
