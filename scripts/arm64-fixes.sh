@@ -17,17 +17,18 @@ else
 fi
 
 # 2. elegoo-link (Elegoo's printer connection library):
-#    a) Its cloud features use the Agora SDK, which Elegoo only ships as a prebuilt
-#       x86_64 Linux binary, so it can't link on ARM64. Turn cloud features off.
-#       Local network (LAN) printer control is separate code and stays enabled.
-#    b) Some headers use std::find_if without #include <algorithm>; GCC 14's headers
-#       on aarch64 don't pull it in indirectly, so force-include it.
+#    a) Its cloud messaging uses the Agora RTM SDK, which Elegoo only ships as a prebuilt
+#       x86_64 binary. ElegooSlicer needs elegoo-link's cloud API to exist, so keep cloud
+#       features ON and swap the Agora libraries for small ARM64 stand-ins
+#       (scripts/agora-stub.sh) right after the source is downloaded.
+#       LAN printer control is unaffected.
+#    b) Some headers use std::find_if without #include <algorithm>; force-include it.
 f=deps/elegoolink/elegoolink.cmake
-if grep -q -- '-DENABLE_CLOUD_FEATURES=ON' "$f"; then
-  sed -i 's/-DENABLE_CLOUD_FEATURES=ON/-DENABLE_CLOUD_FEATURES=OFF/' "$f"
-  echo "  $f: cloud features off"
-else
-  echo "  $f: cloud flag pattern not found"
+here=$(cd "$(dirname "$0")" && pwd)
+cp "$here/agora-stub.sh" deps/elegoolink/agora-stub.sh
+if ! grep -q 'agora-stub.sh' "$f"; then
+  sed -i 's|^\(\s*\)GIT_TAG\(\s*\)origin/main|&\n\1PATCH_COMMAND bash ${CMAKE_CURRENT_LIST_DIR}/agora-stub.sh|' "$f"
+  echo "  $f: Agora stand-in hooked in"
 fi
 if ! grep -q 'include algorithm' "$f"; then
   sed -i 's/-DBUILD_SHARED_LIBS=OFF/-DBUILD_SHARED_LIBS=OFF\n        "-DCMAKE_CXX_FLAGS=-include algorithm -include cstdint"/' "$f"

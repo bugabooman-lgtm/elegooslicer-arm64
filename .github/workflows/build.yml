@@ -55,6 +55,8 @@ jobs:
         with:
           path: deps/build
           key: elegoo-deps-aarch64-${{ hashFiles('deps/**') }}
+          # Fall back to an older cache: only the dependencies that changed get rebuilt.
+          restore-keys: elegoo-deps-aarch64-
 
       - name: Download Elegoo web components (printer connection pages)
         run: ./build_linux.sh -wr
