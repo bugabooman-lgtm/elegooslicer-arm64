@@ -4,6 +4,8 @@ Unofficial ARM64 (aarch64) Linux builds of [ElegooSlicer](https://github.com/ELE
 made to run on an Android tablet (Galaxy Tab S10 FE) through Termux and a Linux proot,
 so the full slicer — including CANVAS multi-color support for the Centauri Carbon 2 — works on the tablet.
 
+**Tablet setup:** see [TABLET_SETUP.md](TABLET_SETUP.md).
+
 ## How builds are made
 
 GitHub Actions builds Elegoo's own source code, unchanged, on GitHub's free ARM64 Linux machine
