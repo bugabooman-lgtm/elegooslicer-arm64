@@ -51,8 +51,9 @@ The prompt changes to `root@localhost`. Now install a light desktop and the libr
 ```bash
 apt update && apt upgrade -y
 apt install -y xfce4 xfce4-terminal dbus-x11 wget ca-certificates \
-  libgtk-3-0t64 libwebkit2gtk-4.1-0 libgl1 libegl1 libglu1-mesa libgstreamer-plugins-base1.0-0 \
-  gstreamer1.0-plugins-good libsecret-1-0 libnotify4 fonts-noto-core locales
+  libgtk-3-0t64 libwebkit2gtk-4.1-0 libgl1 libegl1 libopengl0 libglu1-mesa libwayland-egl1 \
+  libgstreamer1.0-0 libgstreamer-plugins-base1.0-0 gstreamer1.0-plugins-good \
+  libsecret-1-0 libsm6 libice6 libxkbcommon0 libdbus-1-3 fonts-noto-core locales
 locale-gen en_US.UTF-8
 ```
 (If `libgtk-3-0t64` isn't found, change it to `libgtk-3-0` and run the line again.)
