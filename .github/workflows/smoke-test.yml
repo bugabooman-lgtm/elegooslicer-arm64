@@ -48,7 +48,7 @@ jobs:
 
       - name: Launch on virtual screen and take screenshots
         run: |
-          export LANG=en_US.UTF-8 LIBGL_ALWAYS_SOFTWARE=1 HOME=/root
+          export LANG=en_US.UTF-8 LIBGL_ALWAYS_SOFTWARE=1 HOME=/root SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
           mkdir -p "$HOME/.config"
           Xvfb :99 -screen 0 1600x1000x24 &
           sleep 2

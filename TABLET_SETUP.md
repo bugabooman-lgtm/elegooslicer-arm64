@@ -74,6 +74,7 @@ cat > /usr/local/bin/elegoo <<'EOF'
 export LANG=en_US.UTF-8
 export GDK_SCALE=1
 export LIBGL_ALWAYS_SOFTWARE=1
+export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 mkdir -p ~/.config
 cd ~/elegoo && ./squashfs-root/AppRun "$@"
 EOF
