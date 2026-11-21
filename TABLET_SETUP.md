@@ -116,11 +116,18 @@ To quit: close ElegooSlicer, then swipe Termux away or type `exit` in it.
   background. Fix: set Termux and Termux:X11 to **Unrestricted** battery (Settings → Apps → each app →
   Battery), add both to **Never sleeping apps** (Settings → Battery → Background usage limits), and
   keep **Disable child process restrictions** on. The start script also runs `termux-wake-lock`.
-- **Adding the Centauri Carbon 2:** don't use **Bind** (it needs an Elegoo account login). In
-  Device → Add Printer, use **Add Manually** with the printer's IP address and access code. That uses the
-  local network directly: camera, filament status, commands and uploads all work.
-- **Upload fails with "Printer error (409)"**: a file with the same name is already on the printer.
-  Delete it from the printer's storage (or rename the plate) and send again.
+- **Adding the Centauri Carbon 2:** use **Add Manually** in Device → Add Printer, with the printer's IP
+  address and access code (it then shows under "Local Printers"). Camera, filament status, commands and
+  uploads all work this way, with no Elegoo account needed. Don't use **Bind** / account login on the
+  tablet. An account-bound printer always shows offline in this build (its live status uses the cloud piece
+  that's replaced on ARM). Elegoo also allows only one signed-in device at a time, so logging in on the
+  tablet signs your laptop out. "Sign in with Google" doesn't work in the slicer's built-in browser.
+- **Upload fails with "Printer error (409)":** with an access-code connection, the printer won't overwrite
+  a file that already has the same name (an account-bound laptop can). Fix: in Process → Others →
+  **Filename format**, add `_{timestamp}` before `.gcode`, e.g.
+  `ECC2_{nozzle_diameter[0]}_{input_filename_base}_{filament_name}_{layer_height}_{print_time}_{timestamp}.gcode`,
+  then save it as your own process preset. Every upload gets a unique name. Clear old files off the
+  printer now and then.
 
 - In Termux:X11, open its notification → **Preferences** to change touch mode. "Trackpad" works
   like a laptop touchpad; "Direct touch" taps where your finger is. A Bluetooth mouse is easiest.
