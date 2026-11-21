@@ -16,4 +16,22 @@ else
   echo "  $f: pattern not found (already fixed upstream?)"
 fi
 
+# 2. elegoo-link (Elegoo's printer connection library):
+#    a) Its cloud features use the Agora SDK, which Elegoo only ships as a prebuilt
+#       x86_64 Linux binary, so it can't link on ARM64. Turn cloud features off.
+#       Local network (LAN) printer control is separate code and stays enabled.
+#    b) Some headers use std::find_if without #include <algorithm>; GCC 14's headers
+#       on aarch64 don't pull it in indirectly, so force-include it.
+f=deps/elegoolink/elegoolink.cmake
+if grep -q -- '-DENABLE_CLOUD_FEATURES=ON' "$f"; then
+  sed -i 's/-DENABLE_CLOUD_FEATURES=ON/-DENABLE_CLOUD_FEATURES=OFF/' "$f"
+  echo "  $f: cloud features off"
+else
+  echo "  $f: cloud flag pattern not found"
+fi
+if ! grep -q 'include algorithm' "$f"; then
+  sed -i 's/-DBUILD_SHARED_LIBS=OFF/-DBUILD_SHARED_LIBS=OFF\n        "-DCMAKE_CXX_FLAGS=-include algorithm -include cstdint"/' "$f"
+  echo "  $f: force-include <algorithm>"
+fi
+
 echo "== Done =="
