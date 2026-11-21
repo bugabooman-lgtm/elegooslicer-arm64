@@ -28,6 +28,14 @@ jobs:
           ref: ${{ inputs.version }}
           lfs: false
 
+      - name: Check out this repo's ARM64 fixes
+        uses: actions/checkout@v4
+        with:
+          path: _arm64
+
+      - name: Apply ARM64 fixes
+        run: bash _arm64/scripts/arm64-fixes.sh
+
       - name: Show machine info
         run: |
           uname -a
