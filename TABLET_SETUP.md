@@ -90,6 +90,7 @@ exit
 ```bash
 cat > ~/start-elegoo.sh <<'EOF'
 #!/data/data/com.termux/files/usr/bin/bash
+termux-wake-lock
 pkill -f termux.x11 2>/dev/null
 termux-x11 :0 >/dev/null 2>&1 &
 sleep 2
@@ -110,6 +111,16 @@ chmod +x ~/start-elegoo.sh
 To quit: close ElegooSlicer, then swipe Termux away or type `exit` in it.
 
 ## Tips
+
+- **"Not connected" in Termux:X11 after switching apps** means Android killed Termux in the
+  background. Fix: set Termux and Termux:X11 to **Unrestricted** battery (Settings → Apps → each app →
+  Battery), add both to **Never sleeping apps** (Settings → Battery → Background usage limits), and
+  keep **Disable child process restrictions** on. The start script also runs `termux-wake-lock`.
+- **Adding the Centauri Carbon 2:** don't use **Bind** (it needs an Elegoo account login). In
+  Device → Add Printer, use **Add Manually** with the printer's IP address and access code. That uses the
+  local network directly: camera, filament status, commands and uploads all work.
+- **Upload fails with "Printer error (409)"**: a file with the same name is already on the printer.
+  Delete it from the printer's storage (or rename the plate) and send again.
 
 - In Termux:X11, open its notification → **Preferences** to change touch mode. "Trackpad" works
   like a laptop touchpad; "Direct touch" taps where your finger is. A Bluetooth mouse is easiest.
