@@ -75,6 +75,8 @@ export LANG=en_US.UTF-8
 export GDK_SCALE=1
 export LIBGL_ALWAYS_SOFTWARE=1
 export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+export WEBKIT_DISABLE_COMPOSITING_MODE=1
+export WEBKIT_DISABLE_DMABUF_RENDERER=1
 mkdir -p ~/.config
 cd ~/elegoo && ./squashfs-root/AppRun "$@"
 EOF
