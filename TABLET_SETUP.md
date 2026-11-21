@@ -110,6 +110,32 @@ chmod +x ~/start-elegoo.sh
 
 To quit: close ElegooSlicer, then swipe Termux away or type `exit` in it.
 
+## 6. (Optional) One-tap home screen icon
+
+1. Install **Termux:Widget** from the same place you got Termux (F-Droid, or
+   https://github.com/termux/termux-widget/releases if Termux came from GitHub). Mixed sources won't work together.
+2. In Termux:
+   ```bash
+   mkdir -p ~/.shortcuts
+   cp ~/start-elegoo.sh ~/.shortcuts/ElegooSlicer
+   chmod +x ~/.shortcuts/ElegooSlicer
+   ```
+3. Make ElegooSlicer open automatically when the desktop starts. Run `proot-distro login ubuntu`, then:
+   ```bash
+   mkdir -p ~/.config/autostart
+   cat > ~/.config/autostart/elegoo.desktop <<'EOF2'
+   [Desktop Entry]
+   Type=Application
+   Name=ElegooSlicer
+   Exec=/usr/local/bin/elegoo
+   X-GNOME-Autostart-enabled=true
+   EOF2
+   exit
+   ```
+4. Long-press the home screen → **Widgets** → **Termux:Widget** → 1×1 shortcut → **ElegooSlicer**.
+
+Now one tap starts everything and ElegooSlicer opens on its own.
+
 ## Tips
 
 - **"Not connected" in Termux:X11 after switching apps** means Android killed Termux in the
