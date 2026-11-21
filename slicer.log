@@ -1,0 +1,19 @@
+[2026-11-21 11:01:52.082] [info] [6272] [elegoo_link.cpp:50] ElegooLink - Version: 1.0.6
+[2026-11-21 11:01:52.082] [info] [6272] [lan_service.cpp:93] Initializing LanService...
+[2026-11-21 11:01:52.082] [info] [6272] [lan_service.cpp:571] Adapter initialization skipped - using direct instantiation in printer subclasses
+[2026-11-21 11:01:52.082] [info] [6272] [printer_manager.cpp:33] Printer manager initialized successfully
+[2026-11-21 11:01:52.082] [info] [6272] [printer_discovery.cpp:52] PrinterDiscovery initialized with 3 strategies
+[2026-11-21 11:01:52.082] [info] [6272] [lan_service.cpp:145] LanService initialized successfully
+[2026-11-21 11:01:52.082] [info] [6272] [elegoo_link.cpp:57] Local service initialized successfully
+[2026-11-21 11:01:52.082] [info] [6272] [cloud_service.cpp:111] Starting CloudService initialization
+[2026-11-21 11:01:52.082] [info] [6272] [http_client.cpp:107] SSL backend: OpenSSL/3.1.8, will use custom CA if provided
+[2026-11-21 11:01:52.082] [info] [6272] [http_service.cpp:715] HTTP client initialized with base URL: https://matrix.elegoo.com
+[2026-11-21 11:01:52.082] [info] [6272] [http_service.cpp:57] HTTP service initialization completed
+[2026-11-21 11:01:52.082] [warning] [6272] [mqtt_client.cpp:307] MQTT client not initialized: brokerUrl is empty
+[2026-11-21 11:01:52.082] [info] [6272] [mqtt_service.cpp:287] MQTT client initialized
+[2026-11-21 11:01:52.082] [info] [6272] [mqtt_service.cpp:102] MQTT service initialization completed
+[2026-11-21 11:01:52.082] [info] [6272] [rtm_service.cpp:531] RTM client prepared for lazy initialization
+[2026-11-21 11:01:52.082] [info] [6272] [rtm_service.cpp:40] RTM service initialization completed
+[2026-11-21 11:01:52.082] [info] [6272] [cloud_service.cpp:166] CloudService initialization completed
+[2026-11-21 11:01:52.082] [info] [6272] [elegoo_link.cpp:77] Network service initialized successfully
+[2026-11-21 11:01:52.082] [info] [6272] [elegoo_link.cpp:340] ElegooLink initialization succeeded
